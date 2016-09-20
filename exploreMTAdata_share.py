@@ -18,34 +18,35 @@ http://pythonhow.com/accessing-dataframe-columns-rows-and-cells
 """
 
 
+
 #==============================================================================
 #
-
-urlList = ["http://web.mta.info/developers/data/nyct/turnstile/turnstile_160604.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160528.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160521.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160514.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160507.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160430.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160423.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160409.txt",
-           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160402.txt"]
-
-#len(urlList)=9
-
-import pandas as pd
-#http://pandas.pydata.org/pandas-docs/stable/merging.html
-
-cnt=0
-for u in urlList:
-    Dtmp = pd.read_csv(u)
-    if cnt==0:
-        Dmat = Dtmp
-    else:
-        Dmat = pd.concat([Dmat, Dtmp])
-    cnt += 1
-
-del Dtmp
+#
+#urlList = ["http://web.mta.info/developers/data/nyct/turnstile/turnstile_160604.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160528.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160521.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160514.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160507.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160430.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160423.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160409.txt",
+#           "http://web.mta.info/developers/data/nyct/turnstile/turnstile_160402.txt"]
+#
+##len(urlList)=9
+#
+#import pandas as pd
+##http://pandas.pydata.org/pandas-docs/stable/merging.html
+#
+#cnt=0
+#for u in urlList:
+#    Dtmp = pd.read_csv(u)
+#    if cnt==0:
+#        Dmat = Dtmp
+#    else:
+#        Dmat = pd.concat([Dmat, Dtmp])
+#    cnt += 1
+#
+#del Dtmp
 #==============================================================================
 
 
@@ -64,9 +65,8 @@ D = pd.read_csv(url)
 
 
 
-#==============================================================================
-# ## Create Dictionary
-#==============================================================================
+
+## Create Dictionary
 
 #D=Dmat
 
@@ -82,12 +82,15 @@ for row in D.values:
     linename = row[4]
     division = row[5]
     date = row[6]
+    #date_wday = DUparser.parse(date).weekday()
     time = row[7]
     desc = row[8]
     entries = row[9]
     exits = row[10]
 
-    Ddict[(ca, unit, scp, station)].append([DUparser.parse(date + " " + time), (int(entries) + int(exits))])
+#    Ddict[(ca, unit, scp, station)].append([DUparser.parse(date + " " + time), date_wday, int(entries) ]) #,  int(exits)])
+
+    Ddict[(ca, unit, scp, station)].append([DUparser.parse(date + " " + time), int(entries) ]) #,  int(exits)])
 
 
 #==============================================================================
@@ -111,9 +114,10 @@ for key in Ddict:
 
     for tf in Ddict[key]:
         DateTime= tf[0]
-        volumn = tf[1]
+        #wday = tf[1]
+        volume = tf[1]
 
-        tmpHdict[DateTime.date()].append(volumn)
+        tmpHdict[DateTime.date()].append(volume)
 #        break
 #        print(tmpTdict)
 
@@ -127,7 +131,8 @@ for key in Ddict:
         else:
             count = [0]
 
-        tmpCdict[date].append(count)
+        # tmpCdict[date].append([date.weekday(),count])
+        tmpCdict[date.weekday()].append(count)
     Sdict[key]= tmpCdict
 
 
@@ -135,5 +140,15 @@ for key in Ddict:
 
 
 ## Cluster Count Passenger Vol by Station
+
+#DC = {(keys[0],keys[1],keys[3]): values for keys, values in Sdict.items() }
+
+
+#pd.DataFrame(Sdict[list(Sdict.keys())[0]])
+#pd.DataFrame(Sdict[list(Sdict.keys())[1]])
+#pd.concat([])
+
+
+
 
 
