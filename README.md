@@ -1,5 +1,4 @@
-##
-Token Entry -- street-team placement recommendations
+## Token Entry -- street-team placement recommendations
 
 This project assessed potential NYC-MTA stations data for street-teams placement in aid of a non-profit's mission to engage more women in tech.
 Data Resources, Assumptions, Exploratory Analyses, and presentation are deposited in this repo.
